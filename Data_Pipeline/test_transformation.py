@@ -119,3 +119,56 @@
     "manifest": "migration/manifest.json"
   }
 }
+
+
+
+# final
+
+{
+  "provider": "groq",
+  "result": {
+    "source": "oracle",
+    "target": "postgresql",
+    "table_management": [
+      "CREATE TABLE IF NOT EXISTS public.departments (department_id INTEGER NOT NULL, department_name VARCHAR(100), location_id INTEGER, location VARCHAR(100), PRIMARY KEY (department_id));",
+      "CREATE TABLE IF NOT EXISTS public.employees (employee_id INTEGER NOT NULL, employee_name VARCHAR(100), department_id INTEGER, PRIMARY KEY (employee_id));",
+      "CREATE TABLE IF NOT EXISTS public.subjects (subject_id INTEGER NOT NULL, subject_name VARCHAR(100) NOT NULL, PRIMARY KEY (subject_id));"
+    ],
+    "files": [
+      {
+        "path": "migration/postgres/ddl/001_create_table_departments.sql",
+        "group": "table_management",
+        "index": 0,
+        "statement": "CREATE TABLE IF NOT EXISTS public.departments (department_id INTEGER NOT NULL, department_name VARCHAR(100), location_id INTEGER, location VARCHAR(100), PRIMARY KEY (department_id));"
+      },
+      {
+        "path": "migration/postgres/ddl/002_create_table_employees.sql",
+        "group": "table_management",
+        "index": 1,
+        "statement": "CREATE TABLE IF NOT EXISTS public.employees (employee_id INTEGER NOT NULL, employee_name VARCHAR(100), department_id INTEGER, PRIMARY KEY (employee_id));"
+      },
+      {
+        "path": "migration/postgres/ddl/003_create_table_subjects.sql",
+        "group": "table_management",
+        "index": 2,
+        "statement": "CREATE TABLE IF NOT EXISTS public.subjects (subject_id INTEGER NOT NULL, subject_name VARCHAR(100) NOT NULL, PRIMARY KEY (subject_id));"
+      }
+    ],
+    "diff": {
+      "created_tables": [
+        "DEPARTMENTS",
+        "EMPLOYEES",
+        "SUBJECTS"
+      ],
+      "dropped_tables": [],
+      "altered_tables": [],
+      "unchanged_tables": []
+    },
+    "summary": "Created 3 target tables, altered 0 tables, dropped 0 tables."
+  },
+  "layout": {
+    "ddl": "migration/postgres/ddl",
+    "target_schema": "migration/postgres/schema/target_schema.json",
+    "manifest": "migration/manifest.json"
+  }
+}

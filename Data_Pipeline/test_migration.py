@@ -62,3 +62,55 @@
         "manifest": "migration/manifest.json"
     }
 }
+
+
+
+# final
+{
+  "provider": "gemini",
+  "result": {
+    "source": "oracle",
+    "target": "postgresql",
+    "data_extraction": [
+      "SELECT DISTINCT E.DEPARTMENT_ID, D.DEPARTMENT_NAME FROM HR.EMPLOYEES E JOIN HR.DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID WHERE E.DEPARTMENT_ID IS NOT NULL AND D.DEPARTMENT_NAME IS NOT NULL;",
+      "SELECT EMPLOYEE_ID, FIRST_NAME || ' ' || LAST_NAME AS EMPLOYEE_NAME, DEPARTMENT_ID FROM HR.EMPLOYEES;"
+    ],
+    "data_management": [
+      "INSERT INTO public.departments (department_id, department_name) VALUES {VALUES_PLACEHOLDER};",
+      "INSERT INTO public.employees (employee_id, employee_name, department_id) VALUES {VALUES_PLACEHOLDER};"
+    ],
+    "files": [
+      {
+        "path": "migration/oracle/data/001_select_employee.sql",
+        "group": "data_extraction",
+        "index": 0,
+        "statement": "SELECT DISTINCT E.DEPARTMENT_ID, D.DEPARTMENT_NAME FROM HR.EMPLOYEES E JOIN HR.DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID WHERE E.DEPARTMENT_ID IS NOT NULL AND D.DEPARTMENT_NAME IS NOT NULL;"
+      },
+      {
+        "path": "migration/oracle/data/002_select_employee.sql",
+        "group": "data_extraction",
+        "index": 1,
+        "statement": "SELECT EMPLOYEE_ID, FIRST_NAME || ' ' || LAST_NAME AS EMPLOYEE_NAME, DEPARTMENT_ID FROM HR.EMPLOYEES;"
+      },
+      {
+        "path": "migration/postgres/dml/003_insert_departments.sql",
+        "group": "data_management",
+        "index": 0,
+        "statement": "INSERT INTO public.departments (department_id, department_name) VALUES {VALUES_PLACEHOLDER};"
+      },
+      {
+        "path": "migration/postgres/dml/004_insert_employees.sql",
+        "group": "data_management",
+        "index": 1,
+        "statement": "INSERT INTO public.employees (employee_id, employee_name, department_id) VALUES {VALUES_PLACEHOLDER};"
+      }
+    ],
+    "placeholder": "{VALUES_PLACEHOLDER}",
+    "summary": "Generated 2 Oracle to PostgreSQL table migration pairs."
+  },
+  "layout": {
+    "extraction": "migration/oracle/data",
+    "management": "migration/postgres/dml",
+    "manifest": "migration/manifest.json"
+  }
+}
