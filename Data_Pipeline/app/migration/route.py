@@ -9,34 +9,37 @@ router = APIRouter()
 @router.post("/migration")
 async def migration(data: dict):
 
-    if data.get("source") != "oracle":
-        return {
-            "status": "error",
-            "message": "Unsupported source. Only 'oracle' is supported."
-        }
-
-    if data.get("target") != "postgresql":
-        return {
-            "status": "error",
-            "message": "Unsupported target. Only 'postgresql' is supported."
-        }
-
-    if "data_extraction" not in data:
-        return {
-            "status": "error",
-            "message": "data_extraction is required."
-        }
-
-    if "data_management" not in data:
-        return {
-            "status": "error",
-            "message": "data_management is required."
-        }
-
     try:
+
+        migration_data = data["result"]
+
+        if migration_data.get("source") != "oracle":
+            return {
+                "status": "error",
+                "message": "Unsupported source. Only 'oracle' is supported."
+            }
+
+        if migration_data.get("target") != "postgresql":
+            return {
+                "status": "error",
+                "message": "Unsupported target. Only 'postgresql' is supported."
+            }
+
+        if "data_extraction" not in migration_data:
+            return {
+                "status": "error",
+                "message": "data_extraction is required."
+            }
+
+        if "data_management" not in migration_data:
+            return {
+                "status": "error",
+                "message": "data_management is required."
+            }
+
         execute_migration(
-            data["data_extraction"],
-            data["data_management"],
+            migration_data["data_extraction"],
+            migration_data["data_management"],
         )
 
         return {
